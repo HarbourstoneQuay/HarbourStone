@@ -363,7 +363,7 @@
       <p>Your estimated pre-approved amount:</p>
       <div class="highlight-amount">$30,000</div>
 
-      <!-- Lead Source Dropdown Added Here -->
+      <!-- Lead Source Dropdown -->
       <div class="form-group">
         <label for="lead-source">Lead Source</label>
         <select id="lead-source">
@@ -374,7 +374,6 @@
         </select>
       </div>
       
-      <!-- Button with dynamic customer name -->
       <button type="button" class="btn" id="btn-page2" onclick="validatePage2()">Lets see how it can help you</button>
       <div id="page2-error" class="status-box error"></div>
     </div>
@@ -569,7 +568,7 @@
       formData.consultDate = date;
       formData.consultTime = time;
 
-      // Send lead data to email via Web3Forms endpoint
+      // Submission payload configured to route straight to johnchopin49@gmail.com via Web3Forms API
       const submissionData = {
         access_key: "51c91107-1b03-455b-b98a-79a7d32c589b",
         subject: `New Qualified Lead: ${formData.fullName}`,
