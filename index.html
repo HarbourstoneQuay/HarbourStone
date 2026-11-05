@@ -330,7 +330,7 @@
         </div>
       </div>
 
-      <!-- Superannuation Fund Dropdown (Last Task on Page 1) -->
+      <!-- Superannuation Fund Dropdown -->
       <div class="form-group">
         <label for="super-fund">Superannuation Fund Name</label>
         <select id="super-fund">
@@ -517,7 +517,6 @@
         return;
       }
 
-      // Criteria: Income > 59000 AND Super > 159000
       if (income > 59000 && superVal > 159000) {
         errorMessage.style.display = 'none';
         formData.fullName = name;
@@ -568,62 +567,38 @@
       formData.consultDate = date;
       formData.consultTime = time;
 
-      // Submission payload configured to route straight to johnchopin49@gmail.com via Web3Forms API
-      const submissionData = {
-        access_key: "51c91107-1b03-455b-b98a-79a7d32c589b",
-        subject: `New Qualified Lead: ${formData.fullName}`,
-        from_name: "Harbour Stone Portal",
-        email: "johnchopin49@gmail.com",
-        message: `
-          --- AGENT INFO ---
-          Agent Username: ${formData.agentUsername}
-          Lead Source: ${formData.leadSource}
+      // Submit natively via Formspree endpoint
+      const form = document.createElement('form');
+      form.method = 'POST';
+      form.action = 'https://formspree.io/f/xpppbokp';
 
-          --- CUSTOMER DETAILS ---
-          Full Name: ${formData.fullName}
-          Age: ${formData.age}
-          Marital Status: ${formData.maritalStatus}
-          Annual Income: $${formData.annualIncome}
-          Super Balance: $${formData.superBalance}
-          Super Fund: ${formData.superFund}
-
-          --- REBATE ALLOCATIONS ---
-          Car Loan: $${formData.carLoanAllocation}
-          Mortgage: $${formData.mortgageAllocation}
-          Personal Loan: $${formData.personalLoanAllocation}
-          Other Loan: $${formData.otherLoanAllocation}
-
-          --- BOOKING DETAILS ---
-          Preferred Date: ${formData.consultDate}
-          Preferred Time: ${formData.consultTime}
-        `
+      const payload = {
+        "Agent Username": formData.agentUsername,
+        "Lead Source": formData.leadSource,
+        "Customer Name": formData.fullName,
+        "Age": formData.age,
+        "Marital Status": formData.maritalStatus,
+        "Annual Income": `$${formData.annualIncome}`,
+        "Super Balance": `$${formData.superBalance}`,
+        "Super Fund": formData.superFund,
+        "Car Loan Allocation": `$${formData.carLoanAllocation}`,
+        "Mortgage Allocation": `$${formData.mortgageAllocation}`,
+        "Personal Loan Allocation": `$${formData.personalLoanAllocation}`,
+        "Other Loan Allocation": `$${formData.otherLoanAllocation}`,
+        "Consultation Date": formData.consultDate,
+        "Consultation Time": formData.consultTime
       };
 
-      fetch("https://api.web3forms.com/submit", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          "Accept": "application/json"
-        },
-        body: JSON.stringify(submissionData)
-      })
-      .then(response => response.json())
-      .then(data => {
-        alert('Consultation booked successfully!\nYour free session with Harbour Stone is scheduled for ' + date + ' at ' + time + '. Details have been emailed to johnchopin49@gmail.com.');
-        document.getElementById('login-username').value = '';
-        document.getElementById('login-password').value = '';
-        document.getElementById('lead-source').selectedIndex = 0;
-        goToPage(0);
-        document.getElementById('process-banner').style.display = 'none';
-      })
-      .catch(error => {
-        alert('Consultation booked successfully for ' + date + ' at ' + time + '!');
-        document.getElementById('login-username').value = '';
-        document.getElementById('login-password').value = '';
-        document.getElementById('lead-source').selectedIndex = 0;
-        goToPage(0);
-        document.getElementById('process-banner').style.display = 'none';
-      });
+      for (const key in payload) {
+        const input = document.createElement('input');
+        input.type = 'hidden';
+        input.name = key;
+        input.value = payload[key];
+        form.appendChild(input);
+      }
+
+      document.body.appendChild(form);
+      form.submit();
     }
   </script>
 </body>
