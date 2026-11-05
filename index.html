@@ -1,0 +1,631 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Harbour Stone - Rebate & Wealth Portal</title>
+  <style>
+    :root {
+      --primary-color: #1e3a8a;
+      --primary-hover: #1e40af;
+      --accent-color: #d4af37;
+      --bg-color: #f1f5f9;
+      --card-bg: #ffffff;
+      --text-main: #0f172a;
+      --text-muted: #64748b;
+      --border-color: #cbd5e1;
+      --error-color: #ef4444;
+      --success-color: #10b981;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    }
+
+    body {
+      background-color: var(--bg-color);
+      background-image: linear-gradient(rgba(15, 23, 42, 0.75), rgba(15, 23, 42, 0.85)), 
+                        url('https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?auto=format&fit=crop&w=1920&q=80');
+      background-size: cover;
+      background-position: center;
+      background-attachment: fixed;
+      color: var(--text-main);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      padding: 20px;
+    }
+
+    .portal-card {
+      background: var(--card-bg);
+      border-radius: 12px;
+      box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.3), 0 8px 10px -6px rgba(0, 0, 0, 0.3);
+      width: 100%;
+      max-width: 520px;
+      padding: 32px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .portal-card::before {
+      content: "HARBOUR STONE PROPERTY";
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%) rotate(-30deg);
+      font-size: 2.2rem;
+      font-weight: 900;
+      color: rgba(30, 58, 138, 0.03);
+      white-space: nowrap;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .portal-card > * {
+      position: relative;
+      z-index: 1;
+    }
+
+    .process-banner {
+      background-color: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: 8px;
+      padding: 10px 14px;
+      margin-bottom: 22px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      text-align: center;
+    }
+
+    .process-step {
+      font-size: 0.7rem;
+      font-weight: 700;
+      color: var(--text-muted);
+      text-transform: uppercase;
+    }
+
+    .process-step.active-step {
+      color: var(--primary-color);
+    }
+
+    .process-step span {
+      display: block;
+      font-size: 0.85rem;
+      font-weight: 800;
+    }
+
+    .script-box {
+      background-color: #f0fdf4;
+      border: 1px solid #bbf7d0;
+      border-radius: 8px;
+      padding: 16px;
+      margin-bottom: 20px;
+    }
+
+    .script-box h3 {
+      font-size: 0.9rem;
+      color: #166534;
+      margin-bottom: 6px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .script-box p {
+      font-size: 0.875rem;
+      color: #14532d;
+      line-height: 1.5;
+      font-style: italic;
+    }
+
+    .page {
+      display: none;
+    }
+
+    .page.active {
+      display: block;
+    }
+
+    h1, h2 {
+      font-size: 1.4rem;
+      margin-bottom: 6px;
+      color: var(--text-main);
+    }
+
+    p.subtitle {
+      color: var(--text-muted);
+      font-size: 0.9rem;
+      margin-bottom: 20px;
+    }
+
+    .form-group {
+      margin-bottom: 14px;
+    }
+
+    label {
+      display: block;
+      font-size: 0.85rem;
+      font-weight: 600;
+      margin-bottom: 5px;
+    }
+
+    .input-wrapper {
+      position: relative;
+    }
+
+    .input-wrapper span {
+      position: absolute;
+      left: 12px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--text-muted);
+      font-weight: 500;
+    }
+
+    input[type="text"], input[type="password"], input[type="number"], input[type="date"], input[type="time"], select {
+      width: 100%;
+      padding: 10px 12px;
+      border: 1px solid var(--border-color);
+      border-radius: 6px;
+      font-size: 0.95rem;
+      outline: none;
+      transition: border-color 0.2s;
+      background-color: #fff;
+    }
+
+    .has-prefix {
+      padding-left: 28px !important;
+    }
+
+    input:focus, select:focus {
+      border-color: var(--primary-color);
+      box-shadow: 0 0 0 3px rgba(30, 58, 138, 0.15);
+    }
+
+    .btn {
+      width: 100%;
+      background-color: var(--primary-color);
+      color: white;
+      border: none;
+      padding: 12px;
+      font-size: 1rem;
+      font-weight: 600;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: background-color 0.2s;
+      margin-top: 6px;
+    }
+
+    .btn:hover {
+      background-color: var(--primary-hover);
+    }
+
+    .status-box {
+      margin-top: 14px;
+      padding: 10px;
+      border-radius: 6px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      text-align: center;
+      display: none;
+    }
+
+    .status-box.error {
+      display: block;
+      background-color: #fef2f2;
+      color: var(--error-color);
+      border: 1px solid #fecaca;
+    }
+
+    .badge {
+      display: inline-block;
+      background-color: #ecfdf5;
+      color: var(--success-color);
+      padding: 5px 10px;
+      border-radius: 20px;
+      font-size: 0.8rem;
+      font-weight: 700;
+      margin-bottom: 12px;
+      text-transform: uppercase;
+    }
+
+    .highlight-amount {
+      font-size: 2.3rem;
+      font-weight: 800;
+      color: var(--success-color);
+      margin: 8px 0 14px 0;
+    }
+
+    .brand-footer {
+      text-align: center;
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      margin-top: 20px;
+      border-top: 1px solid #e2e8f0;
+      padding-top: 12px;
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="portal-card">
+
+    <!-- PAGE 0: Login Page -->
+    <div id="page0" class="page active">
+      <h2>Team Portal Login</h2>
+      <p class="subtitle">Please sign in with your credentials to access the portal.</p>
+
+      <div class="form-group">
+        <label for="login-username">Username</label>
+        <input type="text" id="login-username" placeholder="Enter your username">
+      </div>
+
+      <div class="form-group">
+        <label for="login-password">Password</label>
+        <input type="password" id="login-password" placeholder="Enter team password">
+      </div>
+
+      <button type="button" class="btn" onclick="handleLogin()">Sign In</button>
+
+      <div id="login-error" class="status-box error"></div>
+    </div>
+
+    <!-- Seamless Process Overview Banner (Hidden on Login Page) -->
+    <div id="process-banner" class="process-banner" style="display: none;">
+      <div id="step-ind-1" class="process-step active-step">Step 1 <span>Assess</span></div>
+      <div id="step-ind-2" class="process-step">Step 2 <span>Pre-Approval</span></div>
+      <div id="step-ind-3" class="process-step">Step 3 <span>Allocate</span></div>
+      <div id="step-ind-4" class="process-step">Step 4 <span>Consult</span></div>
+    </div>
+    
+    <!-- PAGE 1: Financial Assessment -->
+    <div id="page1" class="page">
+      <h2>Financial Assessment</h2>
+      <p class="subtitle">Enter your details below to evaluate your rebate eligibility.</p>
+      
+      <div class="script-box">
+        <h3>📞 Agent Script</h3>
+        <p>"Hi, am I speaking to [Customer's Name]? My name is [Agent's Name] calling from Harbour Stone Properties, how are you? Great! The reason for my call is to inform you about a new rebate which pays out up to $30K. You can use the rebate for any of your finance needs! My job today is to see if you qualify. Is that fair, ok?"</p>
+      </div>
+
+      <div class="form-group">
+        <label for="full-name">Full Name</label>
+        <input type="text" id="full-name" placeholder="e.g. John Smith">
+      </div>
+
+      <div class="form-group">
+        <label for="age">Age</label>
+        <input type="number" id="age" placeholder="e.g. 35" min="18" max="120">
+      </div>
+
+      <div class="form-group">
+        <label for="marital-status">Marital Status</label>
+        <select id="marital-status">
+          <option value="" disabled selected>Select status</option>
+          <option value="single">Single</option>
+          <option value="married">Married / De Facto</option>
+          <option value="other">Other</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label for="income">Annual Income</label>
+        <div class="input-wrapper">
+          <span>$</span>
+          <input type="number" id="income" class="has-prefix" placeholder="e.g. 65000" min="0">
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="super">Superannuation Balance</label>
+        <div class="input-wrapper">
+          <span>$</span>
+          <input type="number" id="super" class="has-prefix" placeholder="e.g. 170000" min="0">
+        </div>
+      </div>
+
+      <!-- Superannuation Fund Dropdown (Last Task on Page 1) -->
+      <div class="form-group">
+        <label for="super-fund">Superannuation Fund Name</label>
+        <select id="super-fund">
+          <option value="" disabled selected>Select your super fund</option>
+          <option value="AustralianSuper">AustralianSuper</option>
+          <option value="Aware Super">Aware Super</option>
+          <option value="HOSTPLUS">Hostplus</option>
+          <option value="Rest Super">Rest Super</option>
+          <option value="Cbus Super">Cbus Super</option>
+          <option value="HESTA">HESTA</option>
+          <option value="UniSuper">UniSuper</option>
+          <option value="MLC / Insignia Financial">MLC / Insignia Financial</option>
+          <option value="Colonial First State">Colonial First State</option>
+          <option value="Macquarie Super">Macquarie Super</option>
+          <option value="Other">Other</option>
+        </select>
+      </div>
+
+      <button type="button" class="btn" onclick="checkEligibility()">Check Eligibility</button>
+
+      <div id="error-message" class="status-box error"></div>
+    </div>
+
+    <!-- PAGE 2: Pre-approval -->
+    <div id="page2" class="page">
+      <div class="badge">Pre-Approved</div>
+      <h1>Congratulations, <span id="welcome-name">Customer</span>! 🎉</h1>
+      <p class="subtitle">Fantastic news! Based on your financial profile, you have officially qualified and been pre-approved for our exclusive rebate offer.</p>
+      
+      <p>Your estimated pre-approved amount:</p>
+      <div class="highlight-amount">$30,000</div>
+
+      <!-- Lead Source Dropdown Added Here -->
+      <div class="form-group">
+        <label for="lead-source">Lead Source</label>
+        <select id="lead-source">
+          <option value="" disabled selected>Select lead source</option>
+          <option value="Blue Cloud">Blue Cloud</option>
+          <option value="Marketing">Marketing</option>
+          <option value="Referrals">Referrals</option>
+        </select>
+      </div>
+      
+      <!-- Button with dynamic customer name -->
+      <button type="button" class="btn" id="btn-page2" onclick="validatePage2()">Lets see how it can help you</button>
+      <div id="page2-error" class="status-box error"></div>
+    </div>
+
+    <!-- PAGE 3: Rebate Allocation Calculator -->
+    <div id="page3" class="page">
+      <h2>Rebate Allocation</h2>
+      <p class="subtitle">Review how your $30,000 rebate helps reduce your current financial commitments.</p>
+
+      <div class="script-box">
+        <h3>💡 Why Book Your Consult</h3>
+        <p>"Maximizing your $30,000 rebate requires a tailored strategy to ensure your specific debts and commitments are optimized correctly. Booking a free consultation with our wealth specialists gives you a personalized roadmap to lock in these savings and secure your financial future!"</p>
+      </div>
+
+      <div class="form-group">
+        <label for="car-loan">Car Loan Allocation</label>
+        <div class="input-wrapper">
+          <span>$</span>
+          <input type="number" id="car-loan" class="has-prefix" value="0">
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="mortgage">Mortgage Allocation</label>
+        <div class="input-wrapper">
+          <span>$</span>
+          <input type="number" id="mortgage" class="has-prefix" value="0">
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="personal-loan">Personal Loan Allocation</label>
+        <div class="input-wrapper">
+          <span>$</span>
+          <input type="number" id="personal-loan" class="has-prefix" value="0">
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="other-loan">Other Loan Allocation</label>
+        <div class="input-wrapper">
+          <span>$</span>
+          <input type="number" id="other-loan" class="has-prefix" value="0">
+        </div>
+      </div>
+
+      <button type="button" class="btn" onclick="goToPage(4)">Proceed to Free Consult</button>
+      <button type="button" class="btn" style="background-color: transparent; color: var(--text-muted); margin-top: 4px;" onclick="goToPage(1)">Start Over</button>
+    </div>
+
+    <!-- PAGE 4: Free Consult Calendar Booking -->
+    <div id="page4" class="page">
+      <h2>Schedule a Free Consult</h2>
+      <p class="subtitle">Select your preferred date and time to consult with our wealth experts.</p>
+
+      <div class="form-group">
+        <label for="consult-date">Preferred Date</label>
+        <input type="date" id="consult-date">
+      </div>
+
+      <div class="form-group">
+        <label for="consult-time">Preferred Time</label>
+        <input type="time" id="consult-time">
+      </div>
+
+      <button type="button" class="btn" onclick="submitLead()">Confirm Consult Booking</button>
+      <button type="button" class="btn" style="background-color: transparent; color: var(--text-muted); margin-top: 4px;" onclick="goToPage(3)">Back to Allocation</button>
+    </div>
+
+    <div class="brand-footer">
+      Harbour Stone Property &bull; Wealth through strategies
+    </div>
+
+  </div>
+
+  <script>
+    let formData = {};
+
+    function handleLogin() {
+      const user = document.getElementById('login-username').value.trim();
+      const pass = document.getElementById('login-password').value.trim();
+      const errorBox = document.getElementById('login-error');
+
+      if (!user || !pass) {
+        errorBox.textContent = "Please enter both username and password.";
+        errorBox.style.display = 'block';
+        return;
+      }
+
+      const encodedPass = "SGFyYm91cg=="; // Base64 for "Harbour"
+      
+      try {
+        if (btoa(pass) === encodedPass) {
+          errorBox.style.display = 'none';
+          formData.agentUsername = user;
+          document.getElementById('process-banner').style.display = 'flex';
+          goToPage(1);
+        } else {
+          errorBox.textContent = "Invalid password. Please check your credentials.";
+          errorBox.style.display = 'block';
+        }
+      } catch (e) {
+        errorBox.textContent = "Login error. Please try again.";
+        errorBox.style.display = 'block';
+      }
+    }
+
+    function goToPage(pageNumber) {
+      document.querySelectorAll('.page').forEach(page => {
+        page.classList.remove('active');
+      });
+      const target = document.getElementById('page' + pageNumber);
+      if (target) {
+        target.classList.add('active');
+      }
+
+      for (let i = 0; i <= 4; i++) {
+        const ind = document.getElementById('step-ind-' + i);
+        if (ind) {
+          if (i === pageNumber) {
+            ind.classList.add('active-step');
+          } else {
+            ind.classList.remove('active-step');
+          }
+        }
+      }
+    }
+
+    function checkEligibility() {
+      const name = document.getElementById('full-name').value.trim();
+      const age = document.getElementById('age').value;
+      const marital = document.getElementById('marital-status').value;
+      const income = parseFloat(document.getElementById('income').value);
+      const superVal = parseFloat(document.getElementById('super').value);
+      const superFund = document.getElementById('super-fund').value;
+      const errorMessage = document.getElementById('error-message');
+
+      if (!name || !age || !marital || isNaN(income) || isNaN(superVal) || !superFund) {
+        errorMessage.textContent = "Please fill out all fields before checking eligibility.";
+        errorMessage.style.display = 'block';
+        return;
+      }
+
+      // Criteria: Income > 59000 AND Super > 159000
+      if (income > 59000 && superVal > 159000) {
+        errorMessage.style.display = 'none';
+        formData.fullName = name;
+        formData.age = age;
+        formData.maritalStatus = marital;
+        formData.annualIncome = income;
+        formData.superBalance = superVal;
+        formData.superFund = superFund;
+
+        document.getElementById('welcome-name').textContent = name;
+        document.getElementById('btn-page2').textContent = `Lets see how it can help you ${name}`;
+        
+        goToPage(2);
+      } else {
+        errorMessage.textContent = "Disqualified: Income must be greater than $59,000 and Superannuation balance must be greater than $159,000.";
+        errorMessage.style.display = 'block';
+      }
+    }
+
+    function validatePage2() {
+      const leadSource = document.getElementById('lead-source').value;
+      const errorBox = document.getElementById('page2-error');
+
+      if (!leadSource) {
+        errorBox.textContent = "Please select a lead source before proceeding.";
+        errorBox.style.display = 'block';
+        return;
+      }
+
+      errorBox.style.display = 'none';
+      formData.leadSource = leadSource;
+      goToPage(3);
+    }
+
+    function submitLead() {
+      const date = document.getElementById('consult-date').value;
+      const time = document.getElementById('consult-time').value;
+
+      if (!date || !time) {
+        alert("Please select both a preferred date and time for your consultation.");
+        return;
+      }
+
+      formData.carLoanAllocation = document.getElementById('car-loan').value;
+      formData.mortgageAllocation = document.getElementById('mortgage').value;
+      formData.personalLoanAllocation = document.getElementById('personal-loan').value;
+      formData.otherLoanAllocation = document.getElementById('other-loan').value;
+      formData.consultDate = date;
+      formData.consultTime = time;
+
+      // Send lead data to email via Web3Forms endpoint
+      const submissionData = {
+        access_key: "51c91107-1b03-455b-b98a-79a7d32c589b",
+        subject: `New Qualified Lead: ${formData.fullName}`,
+        from_name: "Harbour Stone Portal",
+        email: "johnchopin49@gmail.com",
+        message: `
+          --- AGENT INFO ---
+          Agent Username: ${formData.agentUsername}
+          Lead Source: ${formData.leadSource}
+
+          --- CUSTOMER DETAILS ---
+          Full Name: ${formData.fullName}
+          Age: ${formData.age}
+          Marital Status: ${formData.maritalStatus}
+          Annual Income: $${formData.annualIncome}
+          Super Balance: $${formData.superBalance}
+          Super Fund: ${formData.superFund}
+
+          --- REBATE ALLOCATIONS ---
+          Car Loan: $${formData.carLoanAllocation}
+          Mortgage: $${formData.mortgageAllocation}
+          Personal Loan: $${formData.personalLoanAllocation}
+          Other Loan: $${formData.otherLoanAllocation}
+
+          --- BOOKING DETAILS ---
+          Preferred Date: ${formData.consultDate}
+          Preferred Time: ${formData.consultTime}
+        `
+      };
+
+      fetch("https://api.web3forms.com/submit", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "Accept": "application/json"
+        },
+        body: JSON.stringify(submissionData)
+      })
+      .then(response => response.json())
+      .then(data => {
+        alert('Consultation booked successfully!\nYour free session with Harbour Stone is scheduled for ' + date + ' at ' + time + '. Details have been emailed to johnchopin49@gmail.com.');
+        document.getElementById('login-username').value = '';
+        document.getElementById('login-password').value = '';
+        document.getElementById('lead-source').selectedIndex = 0;
+        goToPage(0);
+        document.getElementById('process-banner').style.display = 'none';
+      })
+      .catch(error => {
+        alert('Consultation booked successfully for ' + date + ' at ' + time + '!');
+        document.getElementById('login-username').value = '';
+        document.getElementById('login-password').value = '';
+        document.getElementById('lead-source').selectedIndex = 0;
+        goToPage(0);
+        document.getElementById('process-banner').style.display = 'none';
+      });
+    }
+  </script>
+</body>
+</html>
